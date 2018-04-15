@@ -13,20 +13,22 @@
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-touch-callout: none;
             -webkit-user-select: none;
+            user-select: none;
         }
-
         body {
             font-family: 'Press Start 2P', cursive;
             background: #070920;
             color: rgba(0, 255, 255, .5);
-            /* prevent selection on long tap, showing mobile select UI*/
-            -webkit-user-select: none;
+        }
+        #wrap {
+            width: 490px;
+            margin: 200px auto 150px auto;
+        }
+        #error-no-touch {
+            text-align: center;
         }
 
-        #wrap {
-            width: 470px;
-            margin: 200px auto;
-        }
+        /* div with initial */
 
         .aii-box {
             position: relative;
@@ -37,11 +39,23 @@
             text-transform: uppercase;
             margin: 0 9px;
         }
-
+        .aii-box.aii-active {
+            color: rgba(0, 255, 255, 1);
+        }
+        .aii-box.aii-active div {
+            -webkit-animation: blink .5s step-end infinite alternate;
+        }
         .aii-box div {
-            padding-left: 7px;
+            text-indent: 14px;
             border-bottom: 9px solid;
         }
+        @-webkit-keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        /* top and bottom buttons */
 
         .aii-box button {
             position: absolute;
@@ -52,62 +66,76 @@
             background: none;
             border: none;
         }
-
         .aii-box button:after {
             content: '';
-            display: block;
-            position: absolute;
-            top: 25px;
-            left: 14px;
+            display: inline-block;
             width: 20px;
             height: 20px;
-            border-top: 4px solid;
-            border-right: 4px solid;
+            border-top: 6px solid;
+            border-right: 6px solid;
             -webkit-transform: rotate(-45deg);
             transform: rotate(-45deg);
         }
-
         .aii-box button:last-of-type {
             bottom: auto;
             top: 100%;
         }
-
         .aii-box button:last-of-type:after {
             top: 10px;
             -webkit-transform: rotate(135deg);
             transform: rotate(135deg);
         }
 
-        .aii-active {
+        /* submit demo */
+        #submit-wrap {
+            text-align: center;
+            display: none;
+        }
+        #submit-btn {
+            font-family: inherit;
             color: rgba(0, 255, 255, 1);
+            border: 2px solid;
+            background: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding: 5px;
+            margin-bottom: 10px;
         }
 
-        .aii-active div {
-            -webkit-animation: blink .5s step-end infinite alternate;
-        }
-
-        @-webkit-keyframes blink {
-            50% {
-                border-color: transparent;
-            }
-        }
     </style>
 </head>
 <body>
 <div id="wrap"></div>
-<button id="submitButton">Submit</button>
+<div id="submit-wrap">
+    <button id="submit-btn">SUBMIT</button>
+    <div id="submit-result"></div>
+</div>
+
 </body>
 <script type="module">
     import ArcadeInitials from './dist/ArcadeInitials.js';
 
-    let container = document.getElementById('wrap'),
-        button = document.getElementById('submitButton');
+    (function(){
+        let d = document,
+            container = d.getElementById('wrap'),
+            button = d.getElementById('submit-btn'),
+            submit = d.getElementById('submit-wrap'),
+            isTouch = 'ontouchstart' in window;
 
-    (new ArcadeInitials())
-        .create(3, container)
-        .setActive(0)
-        .bindSubmit(button, function () {
-            console.log(this.getInput());
-        });
+        if (!isTouch) {
+            container.innerHTML = '<p id="error-no-touch">Enable touch to see the demo (use DevTools)</p>';
+            return;
+        }
+
+        submit.style.display = 'block';
+
+        (new ArcadeInitials())
+            .create(3, container)
+            .setActive(0)
+            .bindSubmit(button, function () {
+                submit.querySelector('div').textContent = 'Your initials are: ' + this.getInput();
+            });
+    }());
 </script>
 </html>
