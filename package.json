@@ -2,8 +2,8 @@
   "name": "arcade-initials",
   "version": "1.0.0",
   "description": "Simple interface for retro arcade game leaderboard input",
-  "main": "dist/ArcadeInitials.js",
-  "umd": "dist/ArcadeInitials.umd.js",
+  "main": "dist/ArcadeInitials.min.js",
+  "umd": "dist/ArcadeInitials.umd.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/pecuchet/arcade-score-input.git"
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/pecuchet/arcade-score-input#readme",
   "devDependencies": {
-    "rollup": "^0.57.1"
+    "rollup": "^0.57.1",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "scripts": {
     "build": "rollup -c",
